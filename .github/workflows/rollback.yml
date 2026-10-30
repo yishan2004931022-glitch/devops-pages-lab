@@ -1,0 +1,55 @@
+# Part 3 (O-level). Republish a previously verified build, without rebuilding.
+#
+# Rebuilding to recover is a gamble: the thing that broke may be in the build.
+# This takes the exact bytes that were live and verified earlier and puts them
+# back, then runs the same smoke test to prove the rollback itself worked.
+name: Rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release tag to republish (see the Releases page)"
+        required: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  rollback:
+    name: Republish ${{ inputs.release_tag }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch the chosen build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "${{ inputs.release_tag }}" \
+            --repo "$GITHUB_REPOSITORY" --pattern 'site-*.zip' --dir .
+          mkdir -p _site
+          unzip -q site-*.zip -d _site
+          echo "This release was built from commit $(cat _site/version.txt)"
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Confirm the rollback actually took effect
+        run: |
+          python3 scripts/smoke_test.py \
+            "${{ steps.deployment.outputs.page_url }}" \
+            "$(cat _site/version.txt)"

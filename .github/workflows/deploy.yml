@@ -1,0 +1,113 @@
+# Part 3 (O-level). One workflow, four stages, each gated on the last:
+#
+#     build -> validate -> deploy -> smoke test -> archive
+#
+# validate runs before anything is published, so a broken site never reaches
+# the live URL. smoke test runs after, because a deploy can succeed and still
+# leave the previous build in place - and that failure answers HTTP 200.
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write    # to archive each verified build as a release
+  pages: write
+  id-token: write
+
+# Never let two deploys race. cancel-in-progress stays false: cancelling a
+# half-finished deploy is how you end up serving a mixture of two builds.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build and validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stamp this build with the commit it was made from
+        run: |
+          echo "${{ github.sha }}" > version.txt
+          echo "Stamped version.txt with ${{ github.sha }}"
+
+      - uses: actions/configure-pages@v5
+        id: pages
+
+      - uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+      - name: Gate - validate the built site
+        env:
+          SITE_BASE_URL: ${{ steps.pages.outputs.base_url }}
+        run: python3 scripts/validate_site.py _site
+
+      - name: Archive the built site so it can be rolled back to
+        run: |
+          cd _site
+          zip -qr "../site-${GITHUB_SHA::7}.zip" .
+          cd ..
+          ls -la site-*.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site-zip
+          path: site-*.zip
+          retention-days: 1
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy to Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  smoke:
+    name: Smoke test the live site
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Does the live URL serve this exact build?
+        run: |
+          python3 scripts/smoke_test.py \
+            "${{ needs.deploy.outputs.page_url }}" \
+            "${{ github.sha }}"
+
+  archive:
+    name: Publish a rollback point
+    needs: [build, smoke]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site-zip
+
+      # A release, not a workflow artifact. Pages artifacts expire after a day,
+      # which is exactly when you would want to roll back to one.
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="site-$(date -u +%Y%m%d-%H%M%S)-${GITHUB_SHA::7}"
+          gh release create "$tag" site-*.zip \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$tag" \
+            --notes "Deploy of ${GITHUB_SHA} verified live by the smoke test in run ${{ github.run_id }}."
+          echo "Rollback point: $tag"
