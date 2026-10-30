@@ -11,6 +11,16 @@ reading.
 
 ## Recent activity
 <!--START_SECTION:activity-->
+1. 📝 Committed to main in a private repository
+2. 🆕 Opened issue in a private repository
+3. 👤 Assigned issue in a private repository
+4. 🆕 Opened issue in a private repository
+5. 👤 Assigned issue in a private repository
+6. 🎉 Created a new branch exp4/seed-open-question in a private repository
+7. 🔀 Merged PR in a private repository
+8. 📝 Committed to exp4/seed-open-question in a private repository
+9. 📥 Opened PR in a private repository
+10. 📝 Committed to main in a private repository
 <!--END_SECTION:activity-->
 
 ## Release safety
