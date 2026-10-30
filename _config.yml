@@ -1,0 +1,16 @@
+title: DevOps Pages Lab
+description: Yi-Shan Chen - DevOps assignment 7, NTUST
+theme: jekyll-theme-minimal
+
+# baseurl is deliberately not set here.
+#
+# For a project site GitHub works it out on its own: the branch-based build
+# infers it from the repository name, and actions/configure-pages injects the
+# same value when the site is built by a workflow instead. Hard-coding it here
+# would be a third source of truth that silently disagrees with those two the
+# moment the repository is renamed or forked.
+
+exclude:
+  - scripts/
+  - .github/
+  - README-ACTIVITY-BACKUP.md
