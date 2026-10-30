@@ -1,0 +1,26 @@
+# Part 2 (E-level). Rewrites the activity section of README.md on a schedule.
+#
+# The token must be a PAT owned by my own account, not GITHUB_TOKEN. Two
+# separate reasons, both of which break this assignment if ignored:
+#   * the action reads my user activity feed, which GITHUB_TOKEN cannot see;
+#   * a push made with GITHUB_TOKEN does not trigger other workflows, so the
+#     README would change and the site would never rebuild.
+name: Update activity log
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # every 6 hours - often enough to look live,
+  workflow_dispatch:        # rare enough not to flood the history
+
+permissions:
+  contents: read            # the PAT does the write, not this token
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: TheDanniCraft/activity-log@v1
+        with:
+          GITHUB_USERNAME: yishan2004931022-glitch
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
