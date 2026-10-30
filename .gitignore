@@ -1,0 +1,5 @@
+version.txt
+_site/
+site-*.zip
+.jekyll-cache/
+Gemfile.lock
