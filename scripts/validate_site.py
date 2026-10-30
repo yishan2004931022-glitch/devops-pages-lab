@@ -64,8 +64,31 @@ def html_files(root):
                 yield os.path.join(dirpath, n)
 
 
+def base_path_of(url):
+    """The path a project site is served under, e.g. /devops-pages-lab.
+
+    A project site is published at user.github.io/<repo>/, so every absolute
+    link Jekyll writes carries that prefix. Inside _site the same file sits at
+    the root, without it - _site/assets/..., not _site/<repo>/assets/... .
+    Resolving an absolute link literally therefore reports the theme's own
+    stylesheet as a broken link, which is a false failure on every project
+    site in existence.
+    """
+    if not url:
+        return ""
+    try:
+        from urllib.parse import urlparse
+        return urlparse(url).path.rstrip("/")
+    except Exception:
+        return ""
+
+
 def main(site):
     print(f"Validating {site}\n")
+    self_url = os.environ.get("SITE_BASE_URL", "").rstrip("/")
+    base_path = base_path_of(self_url)
+    if base_path:
+        print(f"  (served under {base_path}/)\n")
 
     if not os.path.isdir(site):
         fail("built site exists", f"{site} is not a directory - did the build step run?")
@@ -139,8 +162,13 @@ def main(site):
             target = href.split("#")[0].split("?")[0]
             if not target:
                 continue
-            base = site if target.startswith("/") else os.path.dirname(f)
-            cand = os.path.normpath(os.path.join(base, target.lstrip("/")))
+            if target.startswith("/"):
+                rel = target
+                if base_path and (rel == base_path or rel.startswith(base_path + "/")):
+                    rel = rel[len(base_path):]
+                cand = os.path.normpath(os.path.join(site, rel.lstrip("/")))
+            else:
+                cand = os.path.normpath(os.path.join(os.path.dirname(f), target))
             if os.path.isfile(cand) or os.path.isfile(os.path.join(cand, "index.html")) \
                     or os.path.isdir(cand):
                 continue
@@ -162,7 +190,6 @@ def main(site):
     #    make the site a precondition of its own first publication, and the
     #    first deploy could never happen. Whether this build is reachable is a
     #    question for the smoke test, after it has been published.
-    self_url = os.environ.get("SITE_BASE_URL", "").rstrip("/")
     if self_url:
         skipped = {u for u in external if u.rstrip("/").startswith(self_url)}
         if skipped:
