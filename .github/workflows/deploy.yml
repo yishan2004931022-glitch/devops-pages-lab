@@ -32,8 +32,15 @@ jobs:
 
       - name: Stamp this build with the commit it was made from
         run: |
-          echo "${{ github.sha }}" > version.txt
-          echo "Stamped version.txt with ${{ github.sha }}"
+          # DELIBERATE FAILURE INJECTION - reverted in the next commit.
+          #
+          # This stamps the PREVIOUS commit instead of this one, so the site
+          # that goes live claims to be the build that was already there. That
+          # is exactly what a deploy which did not take effect looks like from
+          # outside: the page loads, every asset is present, HTTP 200
+          # throughout, and the change simply is not there.
+          echo "1521c191fa22245ddff16087d679f0a1fc7201ac" > version.txt
+          echo "Stamped version.txt with 1521c191fa22245ddff16087d679f0a1fc7201ac (DELIBERATELY STALE)"
 
       - uses: actions/configure-pages@v5
         id: pages
