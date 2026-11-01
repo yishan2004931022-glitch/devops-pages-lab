@@ -7,6 +7,7 @@ reading.
 
 - **Live site:** <https://yishan2004931022-glitch.github.io/devops-pages-lab/>
 - **Build version:** [version.txt](version.txt) — the commit SHA this build was made from
+- **Release notes:** [release-notes.html](release-notes.html)
 - **How it works:** [Release safety](#release-safety)
 
 ## Recent activity
