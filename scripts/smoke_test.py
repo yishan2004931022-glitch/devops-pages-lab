@@ -20,8 +20,9 @@ retried before it gives up - but it gives up.
 import os
 import sys
 import time
-import urllib.request
 import urllib.error
+import urllib.parse
+import urllib.request
 
 # Up to two minutes of CDN propagation by default. Overridable so the same
 # script can be exercised quickly in a test without editing it, which is the
@@ -30,10 +31,21 @@ ATTEMPTS = int(os.environ.get("SMOKE_ATTEMPTS", "12"))
 INTERVAL = float(os.environ.get("SMOKE_INTERVAL", "10"))
 
 
+ALLOWED_SCHEMES = ("https", "http")
+
+
 def get(url, timeout=15):
+    # flake8-bandit S310: urlopen() also accepts file:// and custom schemes,
+    # so `smoke_test.py file:///some/dir/ <sha>` would "pass" by reading a
+    # local version.txt. Refuse anything that is not a web URL.
+    scheme = urllib.parse.urlparse(url).scheme
+    if scheme not in ALLOWED_SCHEMES:
+        raise ValueError(f"refusing non-HTTP URL scheme: {scheme!r}")
     req = urllib.request.Request(
-        url, headers={"User-Agent": "pages-smoke-test", "Cache-Control": "no-cache"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
+        url, headers={"User-Agent": "pages-smoke-test",
+                      "Cache-Control": "no-cache"})
+    # Scheme checked above, so this urlopen can only make a web request.
+    with urllib.request.urlopen(req, timeout=timeout) as r:  # noqa: S310
         return r.status, r.read().decode("utf-8", "replace")
 
 

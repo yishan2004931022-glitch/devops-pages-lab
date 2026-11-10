@@ -1,0 +1,9 @@
+[flake8]
+# E/W = pycodestyle style, F = pyflakes bugs, C90 = complexity,
+# S = flake8-bandit security rules.
+select = E,W,F,C90,S
+# 100 columns: this project's explanatory comments were written to ~90-100
+# columns; 79 produced 24 pure-style warnings that hid the 2 security ones.
+max-line-length = 100
+max-complexity = 25
+exclude = .git,_site,.jekyll-cache

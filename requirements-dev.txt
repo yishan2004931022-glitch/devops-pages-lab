@@ -1,0 +1,5 @@
+# Tools used by .github/workflows/security-checks.yml.
+# Pinned exactly so CI is reproducible; Dependabot (pip) proposes upgrades.
+flake8==7.5.0
+flake8-bandit==4.1.1
+zizmor==1.32.0
