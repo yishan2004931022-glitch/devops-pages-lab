@@ -1,0 +1,69 @@
+# Assignment 9 - DevSecOps checks that run on every push and every pull
+# request, including the pull requests Dependabot opens. A finding fails the
+# check, and branch protection can then refuse the merge.
+#
+#   lint       flake8 + flake8-bandit on the Python scripts       (part A)
+#   zizmor     static analysis of the workflows themselves        (part O)
+#   site-test  build the site and run the validation gate on it,  (part E:
+#              so an upgraded Jekyll/Pages action is tested before  each
+#              it can reach deploy.yml                              Dependabot
+#                                                                   PR is tested)
+name: Security checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  lint:
+    name: Lint (flake8 + bandit)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-dev.txt
+      - name: flake8 (E/W/F style and bugs, S security)
+        run: flake8 scripts/ --count --statistics --show-source
+
+  zizmor:
+    name: Workflow audit (zizmor)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-dev.txt
+      - name: Fail on medium-or-higher findings
+        run: zizmor --offline --min-severity medium .
+
+  site-test:
+    name: Build site and run the gate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+      - run: echo "$GITHUB_SHA" > version.txt
+      - uses: actions/jekyll-build-pages@44a6e6beabd48582f863aeeb6cb2151cc1716697 # v1.0.13
+        with:
+          source: ./
+          destination: ./_site
+      - name: Validate the built site
+        run: python3 scripts/validate_site.py _site

@@ -5,6 +5,13 @@
 #   * the action reads my user activity feed, which GITHUB_TOKEN cannot see;
 #   * a push made with GITHUB_TOKEN does not trigger other workflows, so the
 #     README would change and the site would never rebuild.
+#
+# Assignment 9: this is the riskiest workflow in the repo. It hands my PAT to
+# a third-party action, and it was referenced as @v1 - a tag its owner (or
+# anyone who compromised their account) can move to new code at any time,
+# the way tj-actions/changed-files was hijacked in March 2025. Pinning to a
+# full commit SHA means the code that receives the PAT is the code I
+# reviewed; Dependabot still proposes updates as reviewable PRs.
 name: Update activity log
 
 on:
@@ -19,8 +26,10 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: TheDanniCraft/activity-log@v1
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false   # the action commits via the API with the PAT
+      - uses: TheDanniCraft/activity-log@130ff6ba97c30b2d272f27851db0a347b29472af # v1 (= v0.0.17)
         with:
           GITHUB_USERNAME: yishan2004931022-glitch
           GITHUB_TOKEN: ${{ secrets.TOKEN }}

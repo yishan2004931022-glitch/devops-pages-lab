@@ -1,0 +1,29 @@
+# Assignment 9 (E) - Dependabot version updates.
+# Security alerts and security updates are switched on in
+# Settings -> Security and quality -> Advanced Security; this file adds
+# scheduled version updates on top. Every PR Dependabot opens runs
+# security-checks.yml (lint, workflow audit, site build + gate) before merge.
+version: 2
+updates:
+  # The Python tools the CI installs (requirements-dev.txt)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "python"]
+    # Same supply-chain delay as below. Security updates are not delayed.
+    cooldown:
+      default-days: 7
+
+  # The actions in .github/workflows. They are pinned to commit SHAs;
+  # Dependabot understands the "# vX.Y.Z" comments and updates SHA and
+  # comment together.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "github-actions"]
+    # Wait a week before proposing a brand-new release: most hijacked
+    # releases are caught and pulled within days.
+    cooldown:
+      default-days: 7

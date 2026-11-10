@@ -198,20 +198,29 @@ def main(site):
                          f"smoke test, not checked here")
 
     for url in sorted(external):
-        try:
-            req = urllib.request.Request(url, method="HEAD",
-                                         headers={"User-Agent": "pages-link-check"})
-            urllib.request.urlopen(req, timeout=10)
-            ok("external link", url)
-        except urllib.error.HTTPError as e:
-            if e.code in (404, 410):
-                fail("external link", f"{url} returned HTTP {e.code}")
-            else:
-                notes.append(f"{url} returned HTTP {e.code} - not treated as broken")
-        except Exception as e:
-            notes.append(f"{url} could not be reached ({type(e).__name__}) - not treated as broken")
+        check_external_link(url)
 
     return finish()
+
+
+def check_external_link(url):
+    """Check 7 for one URL. Split out of main() to fix flake8 C901."""
+    try:
+        req = urllib.request.Request(url, method="HEAD",
+                                     headers={"User-Agent": "pages-link-check"})
+        # S310 reviewed: main() only passes hrefs that start with http:// or
+        # https:// (filtered in check 6), so file:// cannot reach this call.
+        # Suppressed with a reason, not blindly.
+        urllib.request.urlopen(req, timeout=10)  # noqa: S310
+        ok("external link", url)
+    except urllib.error.HTTPError as e:
+        if e.code in (404, 410):
+            fail("external link", f"{url} returned HTTP {e.code}")
+        else:
+            notes.append(f"{url} returned HTTP {e.code} - not treated as broken")
+    except Exception as e:
+        notes.append(f"{url} could not be reached ({type(e).__name__}) "
+                     "- not treated as broken")
 
 
 def finish():

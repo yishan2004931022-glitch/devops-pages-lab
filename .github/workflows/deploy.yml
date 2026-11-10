@@ -5,6 +5,15 @@
 # validate runs before anything is published, so a broken site never reaches
 # the live URL. smoke test runs after, because a deploy can succeed and still
 # leave the previous build in place - and that failure answers HTTP 200.
+#
+# Assignment 9 hardening (verified with zizmor):
+#   * every action is pinned to a full commit SHA, with the tag as a comment
+#     so Dependabot can still propose upgrades;
+#   * the workflow grants nothing by default, and each job asks only for the
+#     permission it uses - the job that runs a third-party Jekyll build can no
+#     longer write releases or mint a Pages OIDC token;
+#   * checkout does not leave the token in .git/config;
+#   * expressions reach shell scripts through env, never pasted into `run:`.
 name: Deploy site
 
 on:
@@ -12,10 +21,7 @@ on:
     branches: [main]
   workflow_dispatch:
 
-permissions:
-  contents: write    # to archive each verified build as a release
-  pages: write
-  id-token: write
+permissions: {}
 
 # Never let two deploys race. cancel-in-progress stays false: cancelling a
 # half-finished deploy is how you end up serving a mixture of two builds.
@@ -27,18 +33,22 @@ jobs:
   build:
     name: Build and validate
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
 
       - name: Stamp this build with the commit it was made from
         run: |
-          echo "${{ github.sha }}" > version.txt
-          echo "Stamped version.txt with ${{ github.sha }}"
+          echo "$GITHUB_SHA" > version.txt
+          echo "Stamped version.txt with $GITHUB_SHA"
 
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
         id: pages
 
-      - uses: actions/jekyll-build-pages@v1
+      - uses: actions/jekyll-build-pages@44a6e6beabd48582f863aeeb6cb2151cc1716697 # v1.0.13
         with:
           source: ./
           destination: ./_site
@@ -55,13 +65,13 @@ jobs:
           cd ..
           ls -la site-*.zip
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: site-zip
           path: site-*.zip
           retention-days: 1
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
         with:
           path: _site
 
@@ -69,6 +79,9 @@ jobs:
     name: Deploy to Pages
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write      # publish the artifact
+      id-token: write   # deploy-pages proves its identity to Pages with OIDC
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -76,26 +89,31 @@ jobs:
       page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
 
   smoke:
     name: Smoke test the live site
     needs: [build, deploy]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
       - name: Does the live URL serve this exact build?
-        run: |
-          python3 scripts/smoke_test.py \
-            "${{ needs.deploy.outputs.page_url }}" \
-            "${{ github.sha }}"
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        run: python3 scripts/smoke_test.py "$PAGE_URL" "$GITHUB_SHA"
 
   archive:
     name: Publish a rollback point
     needs: [build, smoke]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # the only job that may create a release
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: site-zip
 
@@ -109,5 +127,5 @@ jobs:
           gh release create "$tag" site-*.zip \
             --repo "$GITHUB_REPOSITORY" \
             --title "$tag" \
-            --notes "Deploy of ${GITHUB_SHA} verified live by the smoke test in run ${{ github.run_id }}."
+            --notes "Deploy of ${GITHUB_SHA} verified live by the smoke test in run ${GITHUB_RUN_ID}."
           echo "Rollback point: $tag"
