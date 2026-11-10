@@ -66,4 +66,8 @@ jobs:
           source: ./
           destination: ./_site
       - name: Validate the built site
+        env:
+          # deploy.yml gets this from configure-pages; a PR build has no Pages
+          # context, so give the gate the same project-site path explicitly.
+          SITE_BASE_URL: https://yishan2004931022-glitch.github.io/devops-pages-lab
         run: python3 scripts/validate_site.py _site
