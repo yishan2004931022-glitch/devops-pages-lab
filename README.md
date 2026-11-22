@@ -11,16 +11,16 @@ reading.
 
 ## Recent activity
 <!--START_SECTION:activity-->
-1. 📥 Opened PR #8 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/8)
-2. Added [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy)
-3. 🔀 Merged PR #4 in [yishan2004931022-glitch/coursebuddy](https://github.com/yishan2004931022-glitch/coursebuddy/pull/4)
-4. 🎉 Created a new branch main in [yishan2004931022-glitch/coursebuddy](https://github.com/yishan2004931022-glitch/coursebuddy/tree/main)
-5. 📝 Committed to a9-devsecops in [yishan2004931022-glitch/devops-pages-lab](https://github.com/yishan2004931022-glitch/devops-pages-lab/commit/e92c8e45c34c7f65236fc340f8ea97155e9f589a)
-6. 🎉 Created a new branch a9-devsecops in [yishan2004931022-glitch/devops-pages-lab](https://github.com/yishan2004931022-glitch/devops-pages-lab/tree/a9-devsecops)
-7. 🔀 Merged PR #1 in [yishan2004931022-glitch/devops-pages-lab](https://github.com/yishan2004931022-glitch/devops-pages-lab/pull/1)
-8. 📥 Opened PR #1 in [yishan2004931022-glitch/devops-pages-lab](https://github.com/yishan2004931022-glitch/devops-pages-lab/pull/1)
-9. 🌍 Made repository public [yishan2004931022-glitch/NTUST_QuestionnaireOptimizationSystem_project](https://github.com/yishan2004931022-glitch/NTUST_QuestionnaireOptimizationSystem_project)
-10. 📝 Committed to main in [yishan2004931022-glitch/devops-pages-lab](https://github.com/yishan2004931022-glitch/devops-pages-lab/commit/c22eecffcb010b0a2c629ec31ebf4b5cfc8162aa)
+1. 🔀 Merged PR #8 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/8)
+2. 📥 Opened PR #8 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/8)
+3. Added [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy)
+4. 🔀 Merged PR #4 in [yishan2004931022-glitch/coursebuddy](https://github.com/yishan2004931022-glitch/coursebuddy/pull/4)
+5. 🎉 Created a new branch main in [yishan2004931022-glitch/coursebuddy](https://github.com/yishan2004931022-glitch/coursebuddy/tree/main)
+6. 📝 Committed to a9-devsecops in [yishan2004931022-glitch/devops-pages-lab](https://github.com/yishan2004931022-glitch/devops-pages-lab/commit/e92c8e45c34c7f65236fc340f8ea97155e9f589a)
+7. 🎉 Created a new branch a9-devsecops in [yishan2004931022-glitch/devops-pages-lab](https://github.com/yishan2004931022-glitch/devops-pages-lab/tree/a9-devsecops)
+8. 🔀 Merged PR #1 in [yishan2004931022-glitch/devops-pages-lab](https://github.com/yishan2004931022-glitch/devops-pages-lab/pull/1)
+9. 📥 Opened PR #1 in [yishan2004931022-glitch/devops-pages-lab](https://github.com/yishan2004931022-glitch/devops-pages-lab/pull/1)
+10. 🌍 Made repository public [yishan2004931022-glitch/NTUST_QuestionnaireOptimizationSystem_project](https://github.com/yishan2004931022-glitch/NTUST_QuestionnaireOptimizationSystem_project)
 <!--END_SECTION:activity-->
 
 ## Release safety
