@@ -11,16 +11,16 @@ reading.
 
 ## Recent activity
 <!--START_SECTION:activity-->
-1. ❌ Closed issue #3 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/issues/3)
-2. 🎉 Created a new branch devA/auth-skeleton in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/tree/devA/auth-skeleton)
-3. 🎉 Created a new branch devA/probe-features in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/tree/devA/probe-features)
-4. 🔀 Merged PR #15 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/15)
-5. 📝 Committed to main in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/commit/bac190dd6125e0c762892fbfed5b075b5e690b2d)
-6. 📥 Opened PR #15 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/15)
-7. 🔀 Merged PR #14 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/14)
-8. 📥 Opened PR #14 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/14)
-9. 🔀 Merged PR #13 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/13)
-10. 📥 Opened PR #13 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/13)
+1. 📝 Committed to main in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/commit/c00125b8093dd755eff18ad8625072f28bdf5a85)
+2. ❌ Closed issue #3 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/issues/3)
+3. 🎉 Created a new branch devA/auth-skeleton in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/tree/devA/auth-skeleton)
+4. 🎉 Created a new branch devA/probe-features in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/tree/devA/probe-features)
+5. 🔀 Merged PR #15 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/15)
+6. 📝 Committed to main in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/commit/bac190dd6125e0c762892fbfed5b075b5e690b2d)
+7. 📥 Opened PR #15 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/15)
+8. 🔀 Merged PR #14 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/14)
+9. 📥 Opened PR #14 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/14)
+10. 🔀 Merged PR #13 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/13)
 <!--END_SECTION:activity-->
 
 ## Release safety
