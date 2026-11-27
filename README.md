@@ -11,16 +11,16 @@ reading.
 
 ## Recent activity
 <!--START_SECTION:activity-->
-1. 🗣 Commented on a review of PR #23 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/23#pullrequestreviewcomment-4697297046)
-2. 🗣 Commented on a review of PR #23 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/23#pullrequestreviewcomment-4697300891)
-3. 🗣 Commented on PR #25 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/issues/25#issuecomment-7168089111)
-4. 🗣 Commented on PR #24 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/issues/24#issuecomment-7168080697)
-5. ❌ Closed issue #19 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/issues/19)
-6. 🔀 Merged PR #23 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/23)
-7. 🔎 Created PR #23 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/23#pullrequestreview-6060677884)
-8. 🔎 Created PR #23 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/23#pullrequestreview-6060673208)
-9. 🔎 Dismissed review for PR #23 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/23#pullrequestreview-6060289203)
-10. 🔎 Created PR #24 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/24#pullrequestreview-6060642214)
+1. 📝 Committed to main in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/commit/8c0896269597938c29c760a273393b9851244d5a)
+2. 🗣 Commented on a review of PR #23 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/23#pullrequestreviewcomment-4697297046)
+3. 🗣 Commented on a review of PR #23 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/23#pullrequestreviewcomment-4697300891)
+4. 🗣 Commented on PR #25 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/issues/25#issuecomment-7168089111)
+5. 🗣 Commented on PR #24 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/issues/24#issuecomment-7168080697)
+6. ❌ Closed issue #19 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/issues/19)
+7. 🔀 Merged PR #23 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/23)
+8. 🔎 Created PR #23 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/23#pullrequestreview-6060677884)
+9. 🔎 Created PR #23 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/23#pullrequestreview-6060673208)
+10. 🔎 Dismissed review for PR #23 in [CourseBuddy-AI/CourseBuddy](https://github.com/CourseBuddy-AI/CourseBuddy/pull/23#pullrequestreview-6060289203)
 <!--END_SECTION:activity-->
 
 ## Release safety
